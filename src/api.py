@@ -32,7 +32,7 @@ async def detect(text:GreetingModel):
     ret, frame = cap.read()
     cv2.imwrite('{}_{}.{}'.format(base_path, datetime.datetime.now().strftime('%Y%m%d%H%M%S%f'), ext), frame)
 
-    proc = subprocess.run('python yolov5/detect.py --source %s' % dir_path, stdout=PIPE, stderr=PIPE, shell=True)
+    proc = subprocess.run('python yolov5/detect.py --source %s --project %s' % (dir_path, dir_path), stdout=PIPE, stderr=PIPE, shell=True)
     proc_str = eval(proc.stdout.decode('utf-8'))
 
     return proc_str 
