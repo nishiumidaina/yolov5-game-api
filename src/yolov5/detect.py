@@ -70,7 +70,7 @@ def run(
         augment=False,  # augmented inference
         visualize=False,  # visualize features
         update=False,  # update all models
-        project=ROOT / 'runs/detect',  # save results to project/name
+        project=ROOT / '../detect_images',  # save results to project/name
         name='exp',  # save results to project/name
         exist_ok=False,  # existing project/name ok, do not increment
         line_thickness=3,  # bounding box thickness (pixels)
@@ -174,6 +174,15 @@ def run(
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
+                target = [['person', 0], ['bicycle', 1], ['car', 2], ['motorcycle', 3], ['bus', 5]]
+                response_data = []
+                for j in range(len(target)):
+                    n_1 = (det[:, -1] == target[j][1]).sum()
+                    count = f"{n_1} "
+                    response_data.append([target[j][0], count])
+
+                print(response_data)
+
             # Stream results
             im0 = annotator.result()
             if view_img:
@@ -236,7 +245,7 @@ def parse_opt():
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--visualize', action='store_true', help='visualize features')
     parser.add_argument('--update', action='store_true', help='update all models')
-    parser.add_argument('--project', default=ROOT / 'runs/detect', help='save results to project/name')
+    parser.add_argument('--project', default=ROOT / '../detect_images', help='save results to project/name')
     parser.add_argument('--name', default='exp', help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--line-thickness', default=3, type=int, help='bounding box thickness (pixels)')
