@@ -4,6 +4,7 @@ import datetime
 import pafy
 import cv2
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import subprocess
 from subprocess import PIPE
 from pydantic import BaseModel
@@ -12,10 +13,9 @@ app = FastAPI()
 
 class GreetingModel(BaseModel):
     detect_id: int
-    detect_mode: int
     detect_url: str
 
-@app.post("/detect/")
+@app.post('/detect/')
 async def detect(text:GreetingModel):
     dir_path = 'target_images/%s' % text.detect_id
     basename = 'camera_capture_cycle'
@@ -36,3 +36,9 @@ async def detect(text:GreetingModel):
     proc_str = eval(proc.stdout.decode('utf-8'))
 
     return proc_str 
+
+@app.get('/image/')
+async def bicycle(id: int = 0):
+    file = os.listdir('./target_images/%s/exp' % id)
+
+    return FileResponse('./target_images/%s/exp/%s' % (id, file[0]))
